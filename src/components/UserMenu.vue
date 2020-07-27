@@ -2,7 +2,9 @@
   <div id="userMenu">
     <img src="../assets/images/user.svg" alt="user icon" id="userIcon" />
     <h5 id="userName">{{ currentUser }}</h5>
-    <a id="logout" href="#" class="flex-1 align-right" title="Logout"><img id="logoutIcon" src="../assets/images/log-out.svg" alt=""></a>
+    <a id="logout" href="#" class="flex-1 align-right">
+      <img id="logoutIcon" src="../assets/images/log-out.svg" title="Logout">
+    </a>
   </div>  
 </template>
 

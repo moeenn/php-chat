@@ -1,6 +1,6 @@
 <template>
-  <div id="chatMessage" v-bind:class="{'right-align': right}">
-    <div class="bubble mb-2 p-2 rounded-corners" v-bind:class="{'bg-dull': (!right)}">
+  <div id="chatMessage" v-bind:class="{'right-align': alignRight}">
+    <div class="bubble mb-2 p-2 rounded-corners" v-bind:class="{'bg-dull': (!alignRight)}">
       <span>{{ msg }}</span>
     </div>
   </div>  
@@ -11,7 +11,7 @@ export default {
   name: 'ChatMessage',
   props: {
     msg: String,
-    right: Boolean,
+    alignRight: Boolean,
   }
 }
 </script>

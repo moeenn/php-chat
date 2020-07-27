@@ -1,8 +1,8 @@
 <template>
   <div id="background">
     <div id="loginWindow" class="border rounded-corners shadow">
-      <div v-if="loginError">
-        <Message msg="Incorrect Username or Password" type="alert" />
+      <div v-if="error.loginError">
+        <AlertMessage v-bind:msg="error.errorMessage" type="alert" />
       </div>
 
       <div class="p-2">
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import Message from '@/components/Message.vue'
+import AlertMessage from '@/components/AlertMessage.vue'
 
 export default {
   name: 'Login',
@@ -43,11 +43,14 @@ export default {
     return {
       username: "",
       password: "",
-      loginError: false,
+      error: { 
+        loginError: false,
+        errorMessage: "Incorrect Username or Password",
+      },
     };
   },
   components: {
-    Message,
+    AlertMessage,
   },
 }
 </script>

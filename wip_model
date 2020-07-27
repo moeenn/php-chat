@@ -1,0 +1,14 @@
+users = {
+  id,
+  name,
+  password,
+}
+
+messages = [
+  id,
+  senderID,
+  recipientID,
+  messageText
+]
+
+query = Get messages to from current user

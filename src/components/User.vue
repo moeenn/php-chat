@@ -1,5 +1,5 @@
 <template>
-  <div id="prevChatUser" class="d-flex p-2">
+  <div id="user" class="d-flex p-2" v-bind:class="{'active': selected}">
     <img id="userIcon" src="../assets/images/user.svg">
     <span id="userName">{{ userName }}</span>
   </div>  
@@ -7,23 +7,27 @@
 
 <script>
 export default {
-  name: 'PrevChatUser',
+  name: 'User',
   props: {
     userName: String,
-  }
+    selected: Boolean,
+  },
 }
 </script>
 
 
 <style scoped>
 
-#prevChatUser {
+#user {
   cursor: pointer;
 }
 
-#prevChatUser:active {
-  background-color: rgba(0,0,0,0.06);
-  color: white;
+#user:hover {
+  background-color: rgba(0,0,0,0.02);
+}
+
+.active {
+  background-color: rgba(0,0,0,0.04);
 }
 
 #userIcon {

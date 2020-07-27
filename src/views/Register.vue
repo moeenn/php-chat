@@ -1,8 +1,8 @@
 <template>
   <div id="background">
     <div id="registerWindow" class="border rounded-corners shadow">
-      <div v-if="loginError">
-        <Message v-bind:msg="errorMessage" type="negative" />
+      <div v-if="error.loginError">
+        <AlertMessage v-bind:msg="error.errorMessage" type="negative" />
       </div>
 
       <div class="p-2">
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import Message from '@/components/Message.vue'
+import AlertMessage from '@/components/AlertMessage.vue'
 
 export default {
   name: 'Login',
@@ -48,12 +48,14 @@ export default {
       username: "",
       password: "",
       retypePassword: "",
-      loginError: true,
-      errorMessage: "Passwords Dont Match",
+      error: {
+        loginError: true,
+        errorMessage: "Passwords Dont Match", 
+      },
     };
   },
   components: {
-    Message,
+    AlertMessage,
   }
 }
 </script>

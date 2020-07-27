@@ -15,9 +15,6 @@ Vue.use(VueRouter)
   {
     path: '/register',
     name: 'Register',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: Register
   },
   {
@@ -30,5 +27,15 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   routes
 })
+
+let isAuthenticated = true;
+
+router.beforeEach((to, from, next) => {
+  if(to.name === 'Chat' && !isAuthenticated) {
+    next({ name: 'Login' });
+  } else {
+    next();
+  }
+});
 
 export default router
