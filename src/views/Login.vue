@@ -51,7 +51,7 @@ export default {
   },
   components: {
     AlertMessage,
-  },
+  }, 
 }
 </script>
 

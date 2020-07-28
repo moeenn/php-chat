@@ -1,7 +1,11 @@
 <template>
-  <div id="user" class="d-flex p-2" v-bind:class="{'active': selected}">
+  <div id="user" 
+    class="d-flex p-2" 
+    v-bind:class="{'active': selected}" 
+    v-on:click="changeSelectedUser(user.id)"
+  >
     <img id="userIcon" src="../assets/images/user.svg">
-    <span id="userName">{{ userName }}</span>
+    <span id="userName">{{ user.name }}</span>
   </div>  
 </template>
 
@@ -9,8 +13,13 @@
 export default {
   name: 'User',
   props: {
-    userName: String,
+    user: Object,
     selected: Boolean,
+  },
+  methods: {
+    changeSelectedUser: function (userID) {
+      this.$emit('ChangeSelectedUser', userID);
+    },
   },
 }
 </script>

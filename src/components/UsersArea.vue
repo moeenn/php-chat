@@ -7,6 +7,7 @@
       <AllUsers 
         v-bind:allUsers="allUsers" 
         v-bind:selectedUserID="selectedUserID" 
+        @ChangeSelectedUser="changeSelectedUser" 
       />
     </div>
   </div>  
@@ -47,6 +48,11 @@ export default {
   components: {
     UserMenu,
     AllUsers,
+  },
+  methods: {
+    changeSelectedUser: function (userID) {
+      this.selectedUserID = userID;
+    }
   },
 }
 </script>

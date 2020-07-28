@@ -1,7 +1,9 @@
 <template>
   <div id="chatWindow">
     <div id="usersArea">
-      <UsersArea v-bind:currentUser="currentUser" />
+      <UsersArea 
+        v-bind:currentUser="currentUser" 
+      />
     </div>
 
     <div id="chatArea">

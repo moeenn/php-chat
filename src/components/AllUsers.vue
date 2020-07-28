@@ -2,9 +2,9 @@
   <div>
     <div v-for="user in allUsers" :key="user.id">
       <User 
-        v-bind:userName="user.name" 
+        v-bind:user="user" 
         v-bind:selected="user.id === selectedUserID"
-        v-on:click="selectUser(user.id)"
+        @ChangeSelectedUser="changeSelectedUser"
       />
     </div>
   </div>  
@@ -23,9 +23,8 @@ export default {
     selectedUserID: Number,
   },
   methods: {
-    selectUser: (userID) => {
-      console.log(userID);
-      this.selectedUserID = userID;
+    changeSelectedUser: function (userID) {
+      this.$emit('ChangeSelectedUser', userID);
     },
   },
 }
