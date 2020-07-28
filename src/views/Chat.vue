@@ -2,12 +2,17 @@
   <div id="chatWindow">
     <div id="usersArea">
       <UsersArea 
-        v-bind:currentUser="currentUser" 
+        v-bind:currentUser="currentUser"
+        v-bind:selectedUserID="selectedUserID"
+        @ChangeSelectedUser="changeSelectedUser"  
       />
     </div>
 
     <div id="chatArea">
-      <ChatArea v-bind:currentUser="currentUser" />
+      <ChatArea 
+        v-bind:currentUser="currentUser" 
+        v-bind:selectedUserID="selectedUserID"  
+      />
     </div>
   </div>
 </template>
@@ -24,12 +29,18 @@ export default {
         id: 4,
         name: "Shah Alam",
       },
+      selectedUserID: 1,
     };
   },
   components: {
     UsersArea,
     ChatArea,
   },
+  methods: {
+    changeSelectedUser: function (userID) {
+      this.selectedUserID = userID;
+    }
+  },  
 }
 </script>
 

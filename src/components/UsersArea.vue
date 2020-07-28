@@ -21,7 +21,6 @@ export default {
   name: 'UsersArea',
   data: () => {
     return ({
-      selectedUserID: 1,
       allUsers: [
         { 
           id: 1,
@@ -44,6 +43,7 @@ export default {
   },
   props: {
     currentUser: Object,
+    selectedUserID: Number,
   },
   components: {
     UserMenu,
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     changeSelectedUser: function (userID) {
-      this.selectedUserID = userID;
+      this.$emit('ChangeSelectedUser', userID);
     }
   },
 }
