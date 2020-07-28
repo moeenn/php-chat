@@ -9,7 +9,9 @@
     </div>
 
     <div id="newMessage">
-      <NewMessage />
+      <NewMessage 
+        @CreateMessage="createMessage"
+      />
     </div>
 
   </div>  
@@ -24,6 +26,7 @@ export default {
   name: 'ChatArea',
   props: {
     currentUser: Object,
+    selectedUserID: Number,
   },
   data: () => {
     return ({
@@ -59,6 +62,17 @@ export default {
   components: {
     ChatBubbles,
     NewMessage,
+  },
+  methods: {
+    createMessage: function (messageText) {
+      const newMessage = {
+        id: 200,
+        senderID: this.currentUser.id,
+        recipientID: this.selectedUserID, 
+        messageText: messageText,
+      };
+      this.chats.push(newMessage);
+    },
   },
 }
 </script>

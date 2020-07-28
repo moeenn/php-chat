@@ -1,8 +1,8 @@
 <template>
   <div id="NewMessage" class="bg-color-dark">
     <div class="d-flex pv-1 ph-5">
-      <textarea class="flex-6"></textarea>
-      <button id="sendButton" title="Send Message">
+      <textarea class="flex-6" v-model="messageText"></textarea>
+      <button id="sendButton" title="Send Message" v-on:click="createMessage"> 
         <img id="sendIcon" src="../assets/images/send.svg">
       </button>
     </div>
@@ -12,6 +12,16 @@
 <script>
 export default {
   name: 'NewMessage',
+  data: function () {
+    return ({
+      messageText: "",
+    });
+  },
+  methods: {
+    createMessage: function () {
+      this.$emit('CreateMessage', this.messageText);
+    },
+  },
 }
 </script>
 
