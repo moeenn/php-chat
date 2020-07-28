@@ -1,14 +1,64 @@
+/*
+ *
+ *	Users
+*/
+
 users = {
-  id,
-  name,
+  userID,
+	userName,
+  fullName,
   password,
 }
 
+
+// CREATE USER TABLE
+CREATE TABLE IF NOT EXISTS users 
+(
+	userID INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+ 	userName VARCHAR (256) UNIQUE NOT NULL,
+ 	fullName VARCHAR (256) NOT NULL,
+	password VARCHAR (256) NOT NULL
+);
+
+
+// example users
+INSERT INTO users (userName, fullName, password) VALUES ("shahid", "Shahid", "qwdqwdqwdqw");
+INSERT INTO users (userName, fullName, password) VALUES ("afridi", "Afridi", "qwdqwdqwdqw");
+INSERT INTO users (userName, fullName, password) VALUES ("kamran", "Kamran", "qwdqwdqwdqw");
+INSERT INTO users (userName, fullName, password) VALUES ("akmal", "Akmal", "qwdqwdqwdqw");
+
+
+/*
+ *
+ *	Messages
+*/
 messages = [
-  id,
+  messageID,
   senderID,
   recipientID,
   messageText
 ]
 
-query = Get messages to from current user
+
+// messages Table
+CREATE TABLE IF NOT EXISTS messages
+(
+	messageID INTEGER PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	senderID INTEGER NOT NULL,
+	recipientID INTEGER NOT NULL,
+	messageText VARCHAR (256),
+	FOREIGN KEY (senderID) REFERENCES users(userID),
+	FOREIGN KEY (recipientID) REFERENCES users(userID)
+);
+
+
+// example messages
+INSERT INTO messages (senderID, recipientID, messageText) VALUES 
+( 1, 3, "Shahid Sent message to Kamran" );
+INSERT INTO messages (senderID, recipientID, messageText) VALUES 
+( 2, 3, "Afridi Sent message to Kamran" );
+INSERT INTO messages (senderID, recipientID, messageText) VALUES 
+( 3, 4, "Kamran Sent message to Akmal" );
+INSERT INTO messages (senderID, recipientID, messageText) VALUES 
+( 4, 2, "Akmal Sent message to Afridi" );
+
