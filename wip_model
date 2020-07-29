@@ -36,7 +36,8 @@ messages = [
   messageID,
   senderID,
   recipientID,
-  messageText
+  messageText,
+  sendingTime,
 ]
 
 
