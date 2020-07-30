@@ -3,10 +3,10 @@
 require_once "User.php";
 
 class UserGateway {
-  private object $m_connection;
+  private object $connection;
 
   public function __construct(object $dbConnection) {
-    $this->m_connection = $dbConnection;
+    $this->connection = $dbConnection;
   }
 
   public function CreateTable() : void {
@@ -21,10 +21,10 @@ class UserGateway {
     EOS;
 
     try {
-      $this->m_connection->query($query);
+      $this->connection->query($query);
     } catch (PDOException $err) {
       $errMessage = "Error: Failed to Create Users Table!\n" . $err->getMessage(); 
-      exit($errMessage);      
+      throw new Exception($errMessage);      
     }
   }
 
@@ -36,14 +36,16 @@ class UserGateway {
     EOS;
 
     try {
-      $query = $this->m_connection->prepare($statement);
-      $query->execute($user->Display());
+      $query = $this->connection->prepare($statement);
+      $userArray = (array) $user;
+      unset($userArray["userID"]);
+      $query->execute($userArray);
     } catch(PDOException $err) {
       $errMessage = "Error: Failed to Create User!\n {$err}";
-      exit($errMessage);
+      throw new Exception($errMessage);
     }
 
-    return (int) $this->m_connection->lastInsertId();
+    return (int) $this->connection->lastInsertId();
   }
 
   // check if provided username / password combo is accurate
@@ -55,20 +57,20 @@ class UserGateway {
     EOS;
     
     try {
-      $query = $this->m_connection->prepare($statement);
+      $query = $this->connection->prepare($statement);
       $query->execute(["userName" => $userName, "password" => $password]);
     } catch(PDOException $err) {
       $errMessage = "Error: Invalid Username or Password!\n{$err}";
-      exit($errMessage);
+      throw new Exception($errMessage);
     }
 
     $result = $query->fetch(); 
     if (!$result) {
       $errMessage = "Error: Invalid Username or Password!\n{$err}";
-      exit($errMessage);
+      throw new Exception($errMessage);
     }
 
-    return User::FromArray($result);
+    return new User($result);
   }
 }
 

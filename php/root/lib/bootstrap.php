@@ -5,13 +5,14 @@ require_once "User.php";
 require_once "UserGateway.php";
 require_once "MessageGateway.php";
 
-$host = 'db';
-$user = 'devuser';
-$pass = 'devpass';
-$db = 'test_db';
+// config constants
+$HOST = 'db';
+$USER = 'devuser';
+$PASS = 'devpass';
+$DB = 'test_db';
 
 // connect to the Database
-$connection = (new Database($host, $db, $user, $pass))->GetConnection();
+$connection = (new Database($HOST, $DB, $USER, $PASS))->GetConnection();
 
 // initialize Gateway objects for interacting with the DB Tables
 $userGateway = new UserGateway($connection);

@@ -3,10 +3,10 @@
 require_once "Message.php";
 
 class MessageGateway {
-  private object $m_connection;
+  private object $connection;
 
   public function __construct(object $dbConnection) {
-    $this->m_connection = $dbConnection;
+    $this->connection = $dbConnection;
   }
 
   public function CreateTable() : void {
@@ -20,11 +20,10 @@ class MessageGateway {
       FOREIGN KEY (senderID) REFERENCES users(userID),
       FOREIGN KEY (recipientID) REFERENCES users(userID)
     );
-
     EOS;
     
     try {
-      $this->m_connection->query($query);
+      $this->connection->query($query);
     } catch (PDOException $err) {
       $errMessage = "Error: Failed to Create Messages Table!\n" . $err->getMessage(); 
       exit($errMessage);      
@@ -39,7 +38,7 @@ class MessageGateway {
     EOS;
 
     try {
-      $query = $this->m_connection->prepare($statement);
+      $query = $this->connection->prepare($statement);
       $query->execute([ "uid_1" => $uid_1, "uid_2" => $uid_2]);
     } catch(PDOException $err) {
       $errMessage = "Error: Failed to Fetch Conversations between UserID {$uid_1} and {$uid_2}\n{$err}";
@@ -63,14 +62,14 @@ class MessageGateway {
     EOS;
 
     try {
-      $query = $this->m_connection->prepare($statement);
+      $query = $this->connection->prepare($statement);
       $query->execute($msg->Display());
     } catch(PDOException $err) {
       $errMessage = "Error: Failed to Send Message!\n{$err}";
       exit($errMessage);
     }
 
-    return (int) $this->m_connection->lastInsertId();
+    return (int) $this->connection->lastInsertId();
   }
 }
 
