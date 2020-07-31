@@ -26,7 +26,7 @@ class MessageGateway {
       $this->connection->query($query);
     } catch (PDOException $err) {
       $errMessage = "Error: Failed to Create Messages Table!\n" . $err->getMessage(); 
-      exit($errMessage);      
+      throw new Exception($errMessage);      
     }
   }
 
@@ -42,14 +42,13 @@ class MessageGateway {
       $query->execute([ "uid_1" => $uid_1, "uid_2" => $uid_2]);
     } catch(PDOException $err) {
       $errMessage = "Error: Failed to Fetch Conversations between UserID {$uid_1} and {$uid_2}\n{$err}";
-      exit($errMessage);
+      throw new Exception($errMessage);
     }
 
     $result = $query->fetchAll();
 
     if (!$result) {
-      $errMessage = "Error: Invalid Username or Password!\n{$err}";
-      exit($errMessage);
+      return [];
     }
 
     return $result;
@@ -63,10 +62,12 @@ class MessageGateway {
 
     try {
       $query = $this->connection->prepare($statement);
-      $query->execute($msg->Display());
+      $msgArray = (array) $msg;
+      unset($msgArray["messageID"]);
+      $query->execute($msgArray);
     } catch(PDOException $err) {
       $errMessage = "Error: Failed to Send Message!\n{$err}";
-      exit($errMessage);
+      throw new Exception($errMessage);
     }
 
     return (int) $this->connection->lastInsertId();

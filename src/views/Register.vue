@@ -1,7 +1,7 @@
 <template>
   <div id="background">
     <div id="registerWindow" class="border rounded-corners shadow">
-      <div v-if="error.loginError">
+      <div v-if="error.formError">
         <AlertMessage v-bind:msg="error.errorMessage" type="negative" />
       </div>
 
@@ -10,8 +10,13 @@
           <h1>Register</h1>
 
           <fieldset>
-            <label for="username">User</label>
-            <input type="text" v-model="username" name="username" required="required">
+            <label for="userName">Username</label>
+            <input type="text" v-model="userName" name="userName" required="required">
+          </fieldset>
+
+          <fieldset>
+            <label>Full Name</label>
+            <input type="text" v-model="fullName" name="fullName" required="required">
           </fieldset>
 
           <fieldset>
@@ -20,12 +25,12 @@
           </fieldset>
 
           <fieldset>
-            <label>Re-enter Password</label>
+            <label for="password">Re-type Password</label>
             <input type="password" v-model="retypePassword" required="required" minlength="8">
           </fieldset>
 
           <fieldset>
-            <input type="submit" value="Login" class="button-primary">
+            <input type="submit" value="Login" class="button-primary" v-on:click.prevent="handleSubmit">
           </fieldset>
         </form>
 
@@ -45,25 +50,67 @@ export default {
   name: 'Login',
   data: () => {
     return {
-      username: "",
+      userName: "",
+      fullName: "",
       password: "",
       retypePassword: "",
       error: {
-        loginError: true,
-        errorMessage: "Passwords Dont Match", 
+        formError: false,
+        errorMessage: "", 
       },
     };
   },
   components: {
     AlertMessage,
-  }
+  },
+  methods: {
+    handleSubmit: function () {
+      const isMatch = this.handleMatchPasswords();
+      if (isMatch) this.handleSendUserCreationRequest();
+    },
+
+    handleMatchPasswords: function () {
+      if (this.password !== this.retypePassword) {
+        this.error.formError = true;
+        this.error.errorMessage = "Passwords Dont Match";
+        return false;
+      }
+      
+      this.error.formError = false;
+      return true;
+    },
+
+    handleSendUserCreationRequest: async function () {
+      const body = { 
+        userName: this.userName, 
+        fullName: this.fullName, 
+        password: this.password 
+      };
+
+      const headers = {
+        method: 'POST',
+        headers: new Headers(),
+        body: JSON.stringify(body),
+      };
+
+      const res = await fetch('http://localhost:8000/users/create.php', headers);
+      const json = await res.json();
+
+      if (res.status !== 200) {
+        this.error.formError = true;
+        this.error.errorMessage = "Failed to Create User";
+      }
+
+      console.log(json);
+    }
+  },
 }
 </script>
 
 <style scoped>
 
 #background {
-  height: 100vh;
+  height: 110vh;
   width: 100vw;
   background-color: var(--bg-color-dull);
 }

@@ -25,6 +25,9 @@ if ($context->Method() !== "POST") {
     return;
   }
 
+  session_start();
+  $_SESSION["validatedUser"] = $userObj;
+
   $context->Send($userObj);
 }
 

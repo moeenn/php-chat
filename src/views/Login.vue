@@ -1,7 +1,7 @@
 <template>
   <div id="background">
     <div id="loginWindow" class="border rounded-corners shadow">
-      <div v-if="error.loginError">
+      <div v-if="error.formError">
         <AlertMessage v-bind:msg="error.errorMessage" type="alert" />
       </div>
 
@@ -10,8 +10,8 @@
           <h1>Login</h1>
           
           <fieldset>
-            <label for="username">User</label>
-            <input type="text" v-model="username" name="username" required="required">
+            <label for="userName">Username</label>
+            <input type="text" v-model="userName" name="userName" required="required">
           </fieldset>
           
           <fieldset>
@@ -20,7 +20,7 @@
           </fieldset>
           
           <fieldset>
-            <input type="submit" value="Login" class="button-primary">
+            <input type="submit" value="Login" class="button-primary" v-on:click.prevent="handleSubmit">
           </fieldset>
         </form>
 
@@ -41,16 +41,42 @@ export default {
   name: 'Login',
   data: () => {
     return {
-      username: "",
+      userName: "",
       password: "",
       error: { 
-        loginError: false,
-        errorMessage: "Incorrect Username or Password",
+        formError: false,
+        errorMessage: "",
       },
     };
   },
   components: {
     AlertMessage,
+  },
+  methods: {
+    handleSubmit: async function () {
+      const body = { 
+        userName: this.userName, 
+        password: this.password 
+      };
+
+      const headers = {
+        method: 'POST',
+        headers: new Headers(),
+        body: JSON.stringify(body),
+      };
+
+      const res = await fetch('http://localhost:8000/users/validate.php', headers);
+      const json = await res.json();
+
+      if (res.status !== 200) {
+        this.error.formError = true;
+        this.error.errorMessage = "Incorrect Username or Password";
+      } else {
+        this.error.formError = false;
+      }
+
+      console.log(json);      
+    }
   }, 
 }
 </script>
