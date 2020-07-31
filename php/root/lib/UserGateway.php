@@ -35,10 +35,14 @@ class UserGateway {
     VALUES ( :userName, :fullName, :password);
     EOS;
 
+    // prepare data for insertion into DB
+    $userArray = (array) $user;
+    unset($userArray["userID"]);
+    // hash passwords using BCRYPT before saving to DB
+    $userArray["password"] = password_hash($userArray["password"], PASSWORD_DEFAULT);
+
     try {
       $query = $this->connection->prepare($statement);
-      $userArray = (array) $user;
-      unset($userArray["userID"]);
       $query->execute($userArray);
     } catch(PDOException $err) {
       $errMessage = "Error: Failed to Create User!\n {$err}";
@@ -53,19 +57,24 @@ class UserGateway {
   public function AuthenticateUser(string $userName, string $password) : User {
     $statement = <<<EOS
     SELECT * FROM users
-    WHERE userName = :userName and password = :password;
+    WHERE userName = :userName;
     EOS;
     
     try {
       $query = $this->connection->prepare($statement);
-      $query->execute(["userName" => $userName, "password" => $password]);
+      $query->execute(["userName" => $userName]);
     } catch(PDOException $err) {
-      $errMessage = "Error: Invalid Username or Password!\n{$err}";
+      $errMessage = "Error: User not found!\n{$err}";
       throw new Exception($errMessage);
     }
 
+    // get user from the DB (if exists)
     $result = $query->fetch(); 
-    if (!$result) {
+
+    // verify password hash
+    $isMatch = password_verify($password, $result["password"]);
+
+    if (!$isMatch) {
       $errMessage = "Error: Invalid Username or Password!\n{$err}";
       throw new Exception($errMessage);
     }

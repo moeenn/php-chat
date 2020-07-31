@@ -20,18 +20,29 @@ if ($context->Method() !== "POST") {
 } else {
   $body = $context->Body();
 
-  if(!$body["senderID"] or !$body["recipientID"] or !$body["messageText"] ) {
+  // check if required fields are present in data
+  if(!$body["recipientID"] or !$body["messageText"]) {
     $context->Status(400);
     $context->Send(["error" => "Incomplete Information for sending Message"]);
     return;
   }
 
-  if(gettype($body["senderID"]) !== "integer" or gettype($body["recipientID"]) !== "integer" or gettype($body["messageText"]) !== "string") {
+  // check if data types are valid
+  if(gettype($body["recipientID"]) !== "integer" or gettype($body["messageText"]) !== "string") {
     $context->Status(400);
     $context->Send(["error" => "Invalid Information for sending message"]);
     return;
   }
 
+  // confirm the messageText length doesn't exceed the Maximum limit
+  if(strlen($body["messageText"]) > MAX_MESSAGE_LENGTH) {
+    $context->Status(400);
+    $context->Send(["error" => "Message Text cannot exceed " . MAX_MESSAGE_LENGTH . " characters"]);
+    return;
+  }
+
+  // sender must always be the currently validated user
+  $body["senderID"] = ($_SESSION["validatedUser"])->userID;
   $messageObj = new Message($body);
 
   try {

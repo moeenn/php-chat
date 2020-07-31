@@ -11,6 +11,8 @@ $USER = 'devuser';
 $PASS = 'devpass';
 $DB = 'test_db';
 
+define("MAX_MESSAGE_LENGTH", 256);
+
 // connect to the Database
 $connection = (new Database($HOST, $DB, $USER, $PASS))->GetConnection();
 

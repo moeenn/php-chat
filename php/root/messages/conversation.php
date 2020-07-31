@@ -20,20 +20,21 @@ if ($context->Method() !== "POST") {
 } else {
   $body = $context->Body();
 
-  if(!$body["uid_1"] or !$body["uid_2"] ) {
+  if(!$body["uid"]) {
     $context->Status(400);
     $context->Send(["error" => "Incomplete Information for fetching conversations"]);
     return;
   }
 
-  if(gettype($body["uid_1"]) !== "integer" or gettype($body["uid_2"]) !== "integer") {
+  if(gettype($body["uid"]) !== "integer") {
     $context->Status(400);
     $context->Send(["error" => "Invalid Information for fetching conversations"]);
     return;
   }
 
   try {
-    $messageArray = $messageGateway->GetConversation($body["uid_1"], $body["uid_2"]);
+    $validatedUserID = ($_SESSION["validatedUser"])->userID;
+    $messageArray = $messageGateway->GetConversation($body["uid"], $validatedUserID);
   } catch (Exception $err) {
     $context->Status(400);
     $context->Send(["error" => "Failed to get conversations" ]);
