@@ -30,7 +30,7 @@
           </fieldset>
 
           <fieldset>
-            <input type="submit" value="Login" class="button-primary" v-on:click.prevent="handleSubmit">
+            <input type="submit" value="Create Account" class="button-primary" v-on:click.prevent="handleSubmit">
           </fieldset>
         </form>
 

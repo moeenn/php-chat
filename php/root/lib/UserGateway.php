@@ -54,7 +54,7 @@ class UserGateway {
 
   // check if provided username / password combo is accurate
   // if yes, return the User Object
-  public function AuthenticateUser(string $userName, string $password) : User {
+  public function AuthenticateUser(string $userName, string $password) : array {
     $statement = <<<EOS
     SELECT * FROM users
     WHERE userName = :userName;
@@ -71,15 +71,21 @@ class UserGateway {
     // get user from the DB (if exists)
     $result = $query->fetch(); 
 
+    if(!$result) {
+      $errMessage = "Invalid Username or Password";
+      throw new Exception($errMessage);
+    }
+
     // verify password hash
     $isMatch = password_verify($password, $result["password"]);
 
     if (!$isMatch) {
-      $errMessage = "Error: Invalid Username or Password!\n{$err}";
+      $errMessage = "Invalid Username or Password!\n{$err}";
       throw new Exception($errMessage);
     }
 
-    return new User($result);
+    unset($result["password"]);
+    return $result;
   }
 
   public function AllUsers() : array {

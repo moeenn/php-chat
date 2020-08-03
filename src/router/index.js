@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Chat from '../views/Chat.vue'
+import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,15 @@ Vue.use(VueRouter)
     path: '/chat',
     name: 'Chat',
     component: Chat
+  },
+  {
+    path: '/404',
+    name: 'Not Found',
+    component: NotFound
+  },
+  {
+    path: '*',
+    redirect: '/404'
   }
 ]
 
@@ -28,14 +38,14 @@ const router = new VueRouter({
   routes
 })
 
-let isAuthenticated = true;
+// let isAuthenticated = true;
 
-router.beforeEach((to, from, next) => {
-  if(to.name === 'Chat' && !isAuthenticated) {
-    next({ name: 'Login' });
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if(to.name === 'Chat' && !isAuthenticated) {
+//     next({ name: 'Login' });
+//   } else {
+//     next();
+//   }
+// });
 
 export default router
