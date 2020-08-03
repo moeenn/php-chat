@@ -9,20 +9,21 @@ $context = new Context();
 if ($context->Method() !== "GET") {
   $context->Status(400); // bad request
   $context->Send(["error" => "invalid http method"]);
-} else {
-  // check if user is logged in 
-  session_start();
+  return;
+} 
 
-  // error if user is not already logged in
-  if(!isset($_SESSION["validatedUser"])) {
-    $context->Status(400);
-    $context->Send(["error" => "User must be logged in before they can logout"]);
-    exit(0);
-  }
+// check if user is logged in 
+session_start();
 
-  // logout
-  unset($_SESSION["validatedUser"]);
-  $context->Send(["success" => "User logged out successfully"]);
+// error if user is not already logged in
+if(!isset($_SESSION["validatedUser"])) {
+  $context->Status(400);
+  $context->Send(["error" => "User must be logged in before they can logout"]);
+  return;
 }
+
+// logout
+unset($_SESSION["validatedUser"]);
+$context->Send(["success" => "User logged out successfully"]);
 
 ?>

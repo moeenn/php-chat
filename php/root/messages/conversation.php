@@ -10,38 +10,39 @@ session_start();
 if (!isset($_SESSION["validatedUser"])) {
   $context->Status(401); // unauthorized
   $context->Send(["error" => "Please login to access this resource"]);
-  exit(0);
+  return;
 }
 
 // only allow POST requests to this endpoint
 if ($context->Method() !== "POST") {
   $context->Status(400); // bad request
   $context->Send(["error" => "invalid http method"]);
-} else {
-  $body = $context->Body();
+  return;
+} 
 
-  if(!$body["uid"]) {
-    $context->Status(400);
-    $context->Send(["error" => "Incomplete Information for fetching conversations"]);
-    return;
-  }
+$body = $context->Body();
 
-  if(gettype($body["uid"]) !== "integer") {
-    $context->Status(400);
-    $context->Send(["error" => "Invalid Information for fetching conversations"]);
-    return;
-  }
-
-  try {
-    $validatedUserID = ($_SESSION["validatedUser"])->userID;
-    $messageArray = $messageGateway->GetConversation($body["uid"], $validatedUserID);
-  } catch (Exception $err) {
-    $context->Status(400);
-    $context->Send(["error" => "Failed to get conversations" ]);
-    return;
-  }
-
-  $context->Send($messageArray);
+if(!$body["uid"]) {
+  $context->Status(400);
+  $context->Send(["error" => "Incomplete Information for fetching conversations"]);
+  return;
 }
+
+if(gettype($body["uid"]) !== "integer") {
+  $context->Status(400);
+  $context->Send(["error" => "Invalid Information for fetching conversations"]);
+  return;
+}
+
+try {
+  $validatedUserID = ($_SESSION["validatedUser"])->userID;
+  $messageArray = $messageGateway->GetConversation($body["uid"], $validatedUserID);
+} catch (Exception $err) {
+  $context->Status(400);
+  $context->Send(["error" => "Failed to get conversations" ]);
+  return;
+}
+
+$context->Send($messageArray);
 
 ?>

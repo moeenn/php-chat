@@ -81,6 +81,25 @@ class UserGateway {
 
     return new User($result);
   }
+
+  public function AllUsers() : array {
+    $statement = "SELECT * FROM users;";
+    try {
+      $query = $this->connection->prepare($statement);
+      $query->execute();
+    } catch (PDOException $err) {
+      $errMessage = "Unable to Fetch all Users\n{$err}";
+      throw new Exception($errMessage);
+    }
+
+    $users = $query->fetchAll();
+    // it is possible that no users exist in the DB
+    if(!$users) {
+      return [];
+    }
+
+    return $users;
+  }  
 }
 
 ?>

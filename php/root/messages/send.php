@@ -10,50 +10,51 @@ session_start();
 if (!isset($_SESSION["validatedUser"])) {
   $context->Status(401); // unauthorized
   $context->Send(["error" => "Please login to access this resource"]);
-  exit(0);
+  return;
 }
 
 // only allow POST requests to this Endpoint
 if ($context->Method() !== "POST") {
   $context->Status(400); // bad request
   $context->Send(["error" => "invalid http method"]);
-} else {
-  $body = $context->Body();
+  return;
+} 
 
-  // check if required fields are present in data
-  if(!$body["recipientID"] or !$body["messageText"]) {
-    $context->Status(400);
-    $context->Send(["error" => "Incomplete Information for sending Message"]);
-    return;
-  }
+$body = $context->Body();
 
-  // check if data types are valid
-  if(gettype($body["recipientID"]) !== "integer" or gettype($body["messageText"]) !== "string") {
-    $context->Status(400);
-    $context->Send(["error" => "Invalid Information for sending message"]);
-    return;
-  }
-
-  // confirm the messageText length doesn't exceed the Maximum limit
-  if(strlen($body["messageText"]) > MAX_MESSAGE_LENGTH) {
-    $context->Status(400);
-    $context->Send(["error" => "Message Text cannot exceed " . MAX_MESSAGE_LENGTH . " characters"]);
-    return;
-  }
-
-  // sender must always be the currently validated user
-  $body["senderID"] = ($_SESSION["validatedUser"])->userID;
-  $messageObj = new Message($body);
-
-  try {
-    $insertID = $messageGateway->SendMessage($messageObj);
-  } catch (Exception $err) {
-    $context->Status(400);
-    $context->Send(["error" => "Failed to send Message" . $err->getMessage() ]);
-    return;
-  }
-
-  $context->Send(["messageID" => $insertID]);
+// check if required fields are present in data
+if(!$body["recipientID"] or !$body["messageText"]) {
+  $context->Status(400);
+  $context->Send(["error" => "Incomplete Information for sending Message"]);
+  return;
 }
+
+// check if data types are valid
+if(gettype($body["recipientID"]) !== "integer" or gettype($body["messageText"]) !== "string") {
+  $context->Status(400);
+  $context->Send(["error" => "Invalid Information for sending message"]);
+  return;
+}
+
+// confirm the messageText length doesn't exceed the Maximum limit
+if(strlen($body["messageText"]) > MAX_MESSAGE_LENGTH) {
+  $context->Status(400);
+  $context->Send(["error" => "Message Text cannot exceed " . MAX_MESSAGE_LENGTH . " characters"]);
+  return;
+}
+
+// sender must always be the currently validated user
+$body["senderID"] = ($_SESSION["validatedUser"])->userID;
+$messageObj = new Message($body);
+
+try {
+  $insertID = $messageGateway->SendMessage($messageObj);
+} catch (Exception $err) {
+  $context->Status(400);
+  $context->Send(["error" => "Failed to send Message" . $err->getMessage() ]);
+  return;
+}
+
+$context->Send(["messageID" => $insertID]);
 
 ?>

@@ -8,19 +8,20 @@ $context = new Context();
 if ($context->Method() !== "POST") {
   $context->Status(400); // bad request
   $context->Send(["error" => "invalid http method"]);
-} else {
-  $body = $context->Body();
-  $userObj = new User($body);
+  return;
+} 
 
-  try {
-    $insertID = $userGateway->CreateUser($userObj);
-  } catch (Exception $err) {
-    $context->Status(400);
-    $context->Send(["error" => "Failed to Create User" ]);
-    return;
-  }
+$body = $context->Body();
+$userObj = new User($body);
 
-  $context->Send([ "userID" => $insertID ]);
+try {
+  $insertID = $userGateway->CreateUser($userObj);
+} catch (Exception $err) {
+  $context->Status(400);
+  $context->Send(["error" => "Failed to Create User" ]);
+  return;
 }
+
+$context->Send([ "userID" => $insertID ]);
 
 ?>
