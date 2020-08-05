@@ -1,7 +1,7 @@
 <template>
   <div id="usersArea">
     <div id="userMenu">
-      <UserMenu v-bind:currentUser="currentUser.name" />
+      <UserMenu v-bind:currentUser="currentUser.name" @Logout="logout"/>
     </div>
     <div id="allUsers">
       <AllUsers 
@@ -19,14 +19,10 @@ import AllUsers from '@/components/AllUsers.vue'
 
 export default {
   name: 'UsersArea',
-  data: () => {
-    return ({
-      allUsers: [],
-    });
-  },
   props: {
     currentUser: Object,
     selectedUserID: Number,
+    allUsers: Array,
   },
   components: {
     UserMenu,
@@ -37,32 +33,9 @@ export default {
       this.$emit('ChangeSelectedUser', userID);
     },
 
-    getAllUsers: async function () {
-      const res = await fetch("http://localhost:8000/users/all.php");
-      const allUsers = await res.json();
-      
-      if(!res.ok) {
-        console.warn("Unable to Get Users");
-        console.log(allUsers);
-        return;
-      }
-      // console.log(allUsers);
-
-      // filter out current user
-      let filteredUsers = [];
-      for(const user of allUsers.users) {
-        user.userID = parseInt(user.userID);
-
-        if(user.userID !== this.currentUser.id) {
-          filteredUsers.push(user);
-        }
-      }
-
-      this.allUsers = filteredUsers;
+    logout: function () {
+      this.$emit("Logout");
     }
-  },
-  created: function () {
-    this.getAllUsers();
   }
 }
 </script>

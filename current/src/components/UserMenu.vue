@@ -2,6 +2,9 @@
   <div id="userMenu">
     <img src="../assets/images/user.svg" alt="user icon" id="userIcon" />
     <h5 id="userName">{{ currentUser }}</h5>
+    <a id="logout" href="#" class="flex-1 align-right" v-on:click="logout">
+      <img id="logoutIcon" src="../assets/images/log-out.svg" title="Logout">
+    </a>
   </div>  
 </template>
 
@@ -10,6 +13,11 @@ export default {
   name: 'UserMenu',
   props: {
     currentUser: String,
+  },
+  methods: {
+    logout: function () {
+      this.$emit("Logout");
+    }
   }
 }
 </script>
