@@ -1,0 +1,73 @@
+<template>
+  <div id="userMenu">
+    <img src="../assets/images/user.svg" alt="user icon" id="userIcon" />
+    <h5 id="userName">{{ currentUser }}</h5>
+    <a id="logout" href="#" class="flex-1 align-right" v-on:click="logout">
+      <img id="logoutIcon" src="../assets/images/log-out.svg" title="Logout">
+    </a>
+  </div>  
+</template>
+
+<script>
+export default {
+  name: 'UserMenu',
+  props: {
+    currentUser: String,
+  },
+  methods: {
+    logout: async function() {
+      const res = await fetch("http://localhost:8000/users/logout.php");
+      const json = await res.json();
+
+      if(!res.ok) {
+        console.warn("Unable to Logout");
+        console.log(json);
+        return;
+      }
+      this.$router.push("Login");
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+#userMenu {
+  display: flex;
+  background-color: rgba(0,0,0,0.08);
+  width: 100%;
+  height: 100%; 
+  padding: var(--spacing-1) var(--spacing-2);
+}  
+
+#userMenu:hover {
+  filter: brightness(0.9);
+}
+
+#userMenu #userIcon {
+  height: 4rem;
+  width: 4rem;
+  margin: auto var(--spacing-2) auto 0;
+}
+
+#userMenu #userName {
+  display: inline;
+  vertical-align: bottom;
+  color: rgba(0,0,0,0.55);
+  margin: auto 0;
+}
+
+#userMenu #logout {
+  margin: auto 0;  
+}
+
+#userMenu #logoutIcon {
+  height: 2rem;
+  width: 2rem;
+}
+
+#userMenu #logoutIcon:hover {
+  filter: brightness(0.1);
+}
+
+</style>
