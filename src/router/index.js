@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import Chat from '../views/Chat.vue'
 import NotFound from '../views/NotFound.vue'
 
 Vue.use(VueRouter)
@@ -11,17 +10,17 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Login',
-    component: Login
+    component: Login, 
   },
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: () => Register, 
   },
   {
     path: '/chat',
     name: 'Chat',
-    component: Chat
+    component: () => import("../views/Chat.vue"), 
   },
   {
     path: '/404',

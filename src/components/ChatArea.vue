@@ -90,6 +90,7 @@ export default {
 
 #chatBubbles {
   grid-area: chatBubbles;
+  overflow-y: auto;
 }
 
 #newMessage {

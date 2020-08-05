@@ -48,6 +48,9 @@ import AlertMessage from '@/components/AlertMessage.vue'
 
 export default {
   name: 'Login',
+  props: {
+    authentication: Object,
+  },
   data: () => {
     return {
       userName: "",

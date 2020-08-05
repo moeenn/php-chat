@@ -20,6 +20,7 @@ export default {
   methods: {
     createMessage: function () {
       this.$emit('CreateMessage', this.messageText);
+      this.messageText = "";
     },
   },
 }

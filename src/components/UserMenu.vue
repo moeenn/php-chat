@@ -2,7 +2,7 @@
   <div id="userMenu">
     <img src="../assets/images/user.svg" alt="user icon" id="userIcon" />
     <h5 id="userName">{{ currentUser }}</h5>
-    <a id="logout" href="#" class="flex-1 align-right">
+    <a id="logout" href="#" class="flex-1 align-right" v-on:click="logout">
       <img id="logoutIcon" src="../assets/images/log-out.svg" title="Logout">
     </a>
   </div>  
@@ -14,11 +14,19 @@ export default {
   props: {
     currentUser: String,
   },
-  data: () => {
-    return ({
-      // username: "Saad",
-    });
-  },
+  methods: {
+    logout: async function() {
+      const res = await fetch("http://localhost:8000/users/logout.php");
+      const json = await res.json();
+
+      if(!res.ok) {
+        console.warn("Unable to Logout");
+        console.log(json);
+        return;
+      }
+      this.$router.push("Login");
+    }
+  }
 }
 </script>
 

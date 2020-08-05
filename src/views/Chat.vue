@@ -23,6 +23,9 @@ import ChatArea from '@/components/ChatArea.vue'
 
 export default {
   name: 'Chat',
+  props: {
+    authentication: Object,
+  },
   data: () => {
     return {
       currentUser: {
@@ -39,8 +42,16 @@ export default {
   methods: {
     changeSelectedUser: function (userID) {
       this.selectedUserID = userID;
-    }
-  },  
+    },
+
+    setCurrentUser: function () {
+      this.currentUser.id = this.authentication.user.userID;
+      this.currentUser.name = this.authentication.user.fullName;
+    },
+  }, 
+  created: function () {
+    this.setCurrentUser();
+  } 
 }
 </script>
 

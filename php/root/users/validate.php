@@ -31,5 +31,4 @@ session_start();
 $_SESSION["validatedUser"] = $userObj;
 $context->Send($userObj);
 
-
 ?>

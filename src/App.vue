@@ -1,18 +1,29 @@
 <template>
-  <router-view />
+  <router-view 
+    v-bind:authentication="authentication"
+    @AuthenticateUser="authenticateUser" 
+  />
 </template>
 
 <script>
 
 export default {
-  data: function () {
+  data: () => {
     return ({
       authentication: {
         is_authenticated: false,
-        user: {},
+        user: { default: "default" },
       },
     });
   },
+  methods: {
+    authenticateUser: function (userObject) {
+      this.authentication.is_authenticated = true;
+      this.authentication.user = userObject;
+
+      this.$router.push("Chat");
+    }
+  }
 }
  
 </script>

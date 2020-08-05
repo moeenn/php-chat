@@ -52,8 +52,28 @@ export default {
   methods: {
     changeSelectedUser: function (userID) {
       this.$emit('ChangeSelectedUser', userID);
+    },
+
+    getAllUsers: async function () {
+      const headers = {
+        method: 'GET',
+        headers: new Headers({"Connection": "keep-alive", "Accept": "application/json"}),
+      };
+
+      const res = await fetch("http://localhost:8000/users/all.php", headers);
+      const allUsers = await res.json();
+      
+      if(!res.ok) {
+        console.warn("Unable to Get Users");
+        console.log(allUsers);
+        return;
+      }
+
     }
   },
+  created: function () {
+    this.getAllUsers();
+  }
 }
 </script>
 

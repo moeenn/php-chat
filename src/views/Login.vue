@@ -39,6 +39,9 @@ import AlertMessage from '@/components/AlertMessage.vue'
 
 export default {
   name: 'Login',
+  props: {
+    authentication: Object,
+  },  
   data: () => {
     return {
       userName: "",
@@ -46,7 +49,7 @@ export default {
       error: { 
         formError: false,
         errorMessage: "",
-      },
+      }
     };
   },
   components: {
@@ -61,21 +64,22 @@ export default {
 
       const headers = {
         method: 'POST',
-        headers: new Headers(),
+        headers: new Headers({"Connection": "keep-alive", "Accept": "*/*"}),
         body: JSON.stringify(body),
       };
 
       const res = await fetch('http://localhost:8000/users/validate.php', headers);
-      const json = await res.json();
+      const userObject = await res.json();
 
       if (res.status !== 200) {
         this.error.formError = true;
         this.error.errorMessage = "Incorrect Username or Password";
-      } else {
-        this.error.formError = false;
+        return;
       }
-
-      console.log(json);      
+      
+      this.error.formError = false;
+      // send details to root App component
+      this.$emit("AuthenticateUser", userObject);
     }
   }, 
 }
