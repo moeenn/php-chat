@@ -76,7 +76,10 @@ export default {
 
     changeSelectedUser: function (userID) {
       this.selectedUserID = userID;
-      this.getSelectedUserChats(); 
+
+      this.getSelectedUserChats();
+      // continuously get chats from the server
+      setInterval(this.getSelectedUserChats, 2000); 
     },
 
     changeCurrentUser: function (userID) {
@@ -96,6 +99,7 @@ export default {
     },
 
     filterCurrentUser: function () {
+      this.filteredUsers = [];
       for(const user of this.allUsers) {
         if (user.userID != this.currentUser.id) {
           this.filteredUsers.push(user);
@@ -122,6 +126,12 @@ export default {
         console.warn("Unable to get conversations");
         return;
       }
+
+    chats.sort((a, b) => {
+      if(a.messageID < b.messageID) return -1;
+      if(a.messageID > b.messageID) return 1;
+      return 0;
+    });
 
       this.chats = chats;
     },

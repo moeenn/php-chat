@@ -34,11 +34,12 @@ export default {
     NewMessage,
   },
   methods: {
-    createMessage: function (messageText) {
+    createMessage: function (msg) {
       const newMessage = {
         senderID: this.currentUser.id,
         recipientID: this.selectedUserID, 
-        messageText: messageText,
+        messageText: msg.messageText,
+        sendingTime: msg.sendingTime,
       };
       this.$emit("SendMessage", newMessage);
     },

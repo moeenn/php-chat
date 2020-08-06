@@ -26,8 +26,24 @@ export default {
       }
     },
 
+    getCurrentTime: function () {
+      const date = new Date();
+      const pad = (n) => {
+        return n < 10 ? '0'+n : n;
+      };
+
+      const fullDate = `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDay())}`;
+      const time = `${pad(date.getHours())}-${pad(date.getMinutes())}-${pad(date.getSeconds())}`;
+
+      return `${fullDate} ${time}`;
+    },
+
     createMessage: function () {
-      this.$emit('CreateMessage', this.messageText);
+      const msg = {
+        messageText: this.messageText,
+        sendingTime: this.getCurrentTime(),
+      };
+      this.$emit('CreateMessage', msg);
       this.messageText = "";
     },
   },

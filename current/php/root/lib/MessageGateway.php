@@ -17,6 +17,7 @@ class MessageGateway {
       senderID INTEGER NOT NULL,
       recipientID INTEGER NOT NULL,
       messageText VARCHAR (256),
+      sendingTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (senderID) REFERENCES users(userID),
       FOREIGN KEY (recipientID) REFERENCES users(userID)
     );

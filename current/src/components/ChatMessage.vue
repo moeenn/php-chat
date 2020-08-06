@@ -1,7 +1,9 @@
 <template>
   <div id="chatMessage" v-bind:class="{'right-align': alignRight}">
-    <div class="bubble mb-2 p-2 rounded-corners" v-bind:class="{'bg-dull': (!alignRight)}">
-      <span>{{ msg }}</span>
+    <div class="bubble mb-2 p-1 rounded-corners" v-bind:class="{'bg-dull': (!alignRight)}">
+      <span class="mb-1 ph-1" id="msg">{{ msg }}</span>
+      <br>
+      <span class="fg-size-small fg-align-right" id="sendingTime">{{ sendingTime }}</span>
     </div>
   </div>  
 </template>
@@ -12,6 +14,7 @@ export default {
   props: {
     msg: String,
     alignRight: Boolean,
+    sendingTime: String,
   }
 }
 </script>
@@ -36,6 +39,15 @@ export default {
   width: 45rem;
   overflow-wrap: break-word;
   line-height: var(--fg-line-height);
+}
+
+#chatMessage #sendingTime {
+  display: flow-root;
+  color: rgba(255,255,255,0.7);
+}
+
+#chatMessage #msg {
+  display: inline-block;
 }
 
 @media only screen and (max-width: 950px) {

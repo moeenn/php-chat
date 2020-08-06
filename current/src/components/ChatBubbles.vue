@@ -4,6 +4,7 @@
       <ChatMessage 
         v-bind:msg="message.messageText"
         v-bind:alignRight="message.senderID == currentUser.id"
+        v-bind:sendingTime="message.sendingTime"
       />
     </div>
   </div>  
