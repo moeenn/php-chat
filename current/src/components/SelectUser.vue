@@ -1,13 +1,16 @@
 <template>
   <div id="background">
-    <div id="selectUser" class="border rounded-corners shadow">
+    <div id="selectUser" class="border rounded-corners shadow d-flex flex-v">
       <h3 class="fg-align-center mh-3 mt-2">Select User</h3>
-      <div id="users" v-for="user in allUsers" :key="user.userID">
-        <User 
-          v-bind:user="user" 
-          v-bind:selected="false"
-          @ChangeSelectedUser="changeCurrentUser"
-        />
+      <hr class="m-0">
+      <div id="users">
+        <div v-for="user in allUsers" :key="user.userID">
+          <User 
+            v-bind:user="user" 
+            v-bind:selected="false"
+            @ChangeSelectedUser="changeCurrentUser"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -52,8 +55,11 @@ export default {
   height: 50rem;
   left: calc((100% - var(--width)) / 2);
   top: 12%;
-  overflow-y: auto;
+
 }
 
+#users {
+  overflow-y: auto;
+}
 
 </style>

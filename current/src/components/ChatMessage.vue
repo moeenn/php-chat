@@ -3,7 +3,7 @@
     <div class="bubble mb-2 p-1 rounded-corners" v-bind:class="{'bg-dull': (!alignRight)}">
       <span class="mb-1 ph-1" id="msg">{{ msg }}</span>
       <br>
-      <span class="fg-size-small fg-align-right" id="sendingTime">{{ sendingTime }}</span>
+      <span class="fg-size-small pt-1 fg-align-right" id="sendingTime">{{ sendingTime }}</span>
     </div>
   </div>  
 </template>
